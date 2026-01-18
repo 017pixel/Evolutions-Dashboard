@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biologie: Evolution & Erdgeschichte</title>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-green: #81c784;
+            --text-main: #f0f0f0;
+            --text-dim: #b0b0b0;
+            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            width: 100%;
+            max-width: 1100px;
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+        }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 1px;
+            color: var(--accent-green);
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-btn.active {
+            background: var(--accent-green);
+            color: #1b3320;
+            font-weight: bold;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .content-tab {
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .content-tab.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: var(--accent-green);
+            font-weight: 400;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .info-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #aed581;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 5px;
+            color: var(--accent-green);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .sub-header {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+            letter-spacing: 1px;
+        }
+
+        /* Erdzeitalter Timeline Graphic */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .time-label {
+            background: var(--accent-green);
+            color: #1b3320;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .time-content {
+            padding: 15px;
+        }
+
+        .time-content strong {
+            color: var(--accent-green);
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 10px; }
+            .card { padding: 20px; }
+            .timeline-item { grid-template-columns: 1fr; }
+            .time-label { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Evolution & Erdgeschichte</h1>
+    </header>
+
+    <nav class="nav-bar">
+        <button class="nav-btn active" onclick="openTab('start')">Übersicht</button>
+        <button class="nav-btn" onclick="openTab('geo')">Erdzeitalter</button>
+        <button class="nav-btn" onclick="openTab('fossil')">Fossilien</button>
+        <button class="nav-btn" onclick="openTab('iso')">Isolation</button>
+        <button class="nav-btn" onclick="openTab('theory')">Theorien</button>
+    </nav>
+
+    <main>
+        <!-- ÜBERSICHT -->
+        <div id="start" class="content-tab active">
+            <div class="card">
+                <h2>Systematik der Evolution</h2>
+                <p>Die Evolution beschreibt die allmähliche Veränderung der vererbbaren Merkmale einer Population über Generationen hinweg. Diese Prozesse führen zur Anpassung an die Umwelt und zur Entstehung neuer Arten.</p>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <h3>Variationsquellen</h3>
+                    <p><strong style="color:var(--accent-green)">Mutation:</strong> Spontane, dauerhafte Veränderung des Erbguts (Genom/Chromosomen). Sie erzeugt neue Allele und erhöht die genetische Vielfalt.</p>
+                    <p style="margin-top:15px;"><strong style="color:var(--accent-green)">Rekombination:</strong> Neukombination der vorhandenen Gene bei der Meiose und Befruchtung. Führt zu neuen Merkmalskombinationen bei den Nachkommen.</p>
+                </div>
+                <div class="card">
+                    <h3>Selektionsfaktoren</h3>
+                    <p>Umwelteinflüsse, die den Fortpflanzungserfolg beeinflussen:</p>
+                    <ul style="margin-top:10px;">
+                        <li><strong>Abiotisch:</strong> Temperatur, Licht, Wasser.</li>
+                        <li><strong>Biotisch:</strong> Nahrung, Feinde, Parasiten, Konkurrenz.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- ERDZEITALTER -->
+        <div id="geo" class="content-tab">
+            <div class="card">
+                <h2>Geschichte des Planeten Erde</h2>
+                <p>Die Erdgeschichte wird in Ären unterteilt, die durch große geologische oder biologische Ereignisse (z.B. Massenaussterben) begrenzt sind.</p>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time-label">HEUTE</div>
+                        <div class="time-content">
+                            <strong>Erdneuzeit (Känozoikum):</strong> Dominanz der Säugetiere und Vögel. Entwicklung des Menschen.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time-label">251 Mio. J.</div>
+                        <div class="time-content">
+                            <strong>Erdmittelalter (Mesozoikum):</strong> "Zeitalter der Reptilien" (Dinosaurier). Ammoniten als Leitfossilien. Erste Vögel und Blütenpflanzen.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time-label">541 Mio. J.</div>
+                        <div class="time-content">
+                            <strong>Erdaltzeit (Paläozoikum):</strong> Eroberung des Landes durch Pflanzen und Tiere. Trilobiten und Graptolithen dominieren die Meere.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time-label">4,6 Mrd. J.</div>
+                        <div class="time-content">
+                            <strong>Erdurzeit (Präkambrium):</strong> Entstehung der Erde und erster Einzeller (vor ca. 3,5 Mrd. Jahren). Sauerstoffanreicherung in der Atmosphäre.
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- FOSSILIEN -->
+        <div id="fossil" class="content-tab">
+            <div class="card">
+                <h2>Paläontologie: Die Lehre von den Fossilien</h2>
+                <span class="sub-header">Entstehungsprozesse</span>
+                <div class="grid">
+                    <div class="info-box">
+                        <h3>Abdruck</h3>
+                        <p>Das Lebewesen wird in weichem Sediment eingeschlossen. Die organische Substanz wird zersetzt, aber die Oberflächenstruktur bleibt als Abdruck im erhärteten Gestein sichtbar.</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>Steinkern</h3>
+                        <p>Innere Hohlräume (z.B. Muschelgehäuse) füllen sich mit kalkhaltigem Schlamm. Nach der Auflösung der Schale bleibt das versteinerte Abbild des Inneren übrig.</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>Einschluss</h3>
+                        <p>Konservierung unter Sauerstoffabschluss in Harz (Bernstein), Eis (Permafrost) oder Salz. Erlaubt oft die Untersuchung von Weichteilen.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Leitfossilien & Stratigraphie</h2>
+                <p>Leitfossilien ermöglichen die **relative Altersbestimmung** von Gesteinsschichten (Biostratigraphie).</p>
+                <ul style="margin-top:15px;">
+                    <li><strong>Weite Verbreitung:</strong> Weltweites Vorkommen für überregionale Vergleiche.</li>
+                    <li><strong>Kurze vertikale Reichweite:</strong> Existenz nur in einem kurzen geologischen Zeitraum.</li>
+                    <li><strong>Häufigkeit:</strong> Müssen leicht und oft zu finden sein.</li>
+                    <li><strong>Eindeutigkeit:</strong> Klare Unterscheidbarkeit von anderen Arten.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ISOLATION -->
+        <div id="iso" class="content-tab">
+            <div class="card">
+                <h2>Mechanismen der Isolation</h2>
+                <p>Diese Mechanismen verhindern den Genfluss und sind die Voraussetzung für die <strong>Artbildung</strong>.</p>
+                
+                <div class="grid" style="margin-top:25px;">
+                    <div class="info-box">
+                        <span class="sub-header">Präzygotisch (Vor der Paarung)</span>
+                        <ul>
+                            <li><strong>Ökologisch:</strong> Trennung durch unterschiedliche Habitate oder Nischen im selben Gebiet.</li>
+                            <li><strong>Zeitlich:</strong> Paarung zu unterschiedlichen Tages- oder Jahreszeiten.</li>
+                            <li><strong>Ethologisch:</strong> Artenspezifische Balzsignale (Gesänge, Tänze) werden nicht erkannt.</li>
+                            <li><strong>Mechanisch:</strong> Unterschiedlicher Bau der Kopulationsorgane (Schlüssel-Schloss-Prinzip).</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <span class="sub-header">Postzygotisch (Nach der Paarung)</span>
+                        <ul>
+                            <li><strong>Hybrid-Sterblichkeit:</strong> Die Zygote entwickelt sich nicht weiter oder der Embryo stirbt ab.</li>
+                            <li><strong>Hybrid-Sterilität:</strong> Die Nachkommen sind lebensfähig, aber unfruchtbar (z.B. Kreuzung Pferd/Esel).</li>
+                            <li><strong>Keimzellen-Isolation:</strong> Spermien erreichen die Eizelle nicht oder dringen nicht ein.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEORIEN -->
+        <div id="theory" class="content-tab">
+            <div class="card">
+                <h2>Klassische Evolutionstheorien</h2>
+                <div class="grid">
+                    <div class="info-box">
+                        <h3>Jean-Baptiste de Lamarck</h3>
+                        <ul>
+                            <li><strong>Vervollkommnung:</strong> Innerer Trieb zur Anpassung.</li>
+                            <li><strong>Gebrauch/Nichtgebrauch:</strong> Organe entwickeln sich durch Training oder verkümmern.</li>
+                            <li><strong>Vererbung:</strong> Erworbene Eigenschaften werden an Nachkommen weitergegeben (heute widerlegt).</li>
+                        </ul>
+                    </div>
+                    <div class="info-box">
+                        <h3>Charles Darwin</h3>
+                        <ul>
+                            <li><strong>Überproduktion:</strong> Mehr Nachkommen als zum Überleben notwendig.</li>
+                            <li><strong>Variabilität:</strong> Individuen einer Art unterscheiden sich geringfügig.</li>
+                            <li><strong>Selektion:</strong> "Survival of the fittest" – Individuen mit vorteilhaften Merkmalen überleben häufiger.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function openTab(tabId) {
+            const tabs = document.querySelectorAll('.content-tab');
+            const btns = document.querySelectorAll('.nav-btn');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>
